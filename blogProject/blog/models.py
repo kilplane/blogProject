@@ -1,19 +1,21 @@
 # coding: utf-8
 
 from django.db import models
-
+from django.core.urlresolvers import reverse
 
 class Tag(models.Model):
     slug = models.SlugField(max_length=200, unique=True)
-    
+
     def __str__(self):
         return self.slug
 
 
-## Filtreerib välja, mis on avaldatud
 class EntryQuerySet(models.QuerySet):
     def published(self):
         return self.filter(publish=True)
+
+    def get_absolute_url(self):
+        return reverse("entry_detail", kwargs={"slug": self.slug})
 
 
 class Entry(models.Model):
